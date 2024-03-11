@@ -74,6 +74,8 @@ struct event_t {
     char tablename[XT_TABLE_MAXNAMELEN];
     u64 ipt_delay;
 
+    u32 mappingqueue;
+
     void *skb;
     // skb info
     u8 pkt_type; //skb->pkt_type
@@ -418,6 +420,8 @@ do_trace(void *ctx, struct sk_buff *skb, const char *func_name, void *netdev)
         return 0;
 
     event.skb=skb;
+    // event.mappingqueue= 20;
+    event.mappingqueue= skb->queue_mapping;
     bpf_probe_read(&type.value, 1, ((char*)skb) + offsetof(typeof(*skb), __pkt_type_offset));
     event.pkt_type = type.pkt_type;
 
