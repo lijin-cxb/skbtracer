@@ -264,16 +264,16 @@ def event_printer(cpu, data, size):
     mac_info = ''.join('%02x' % b for b in event.dest_mac)
 
     if event.l4_proto == socket.IPPROTO_TCP:
-        pkt_info = "T_%s:%s:%u->%s:%u queuemapping:%u " % (_get_tcpflags(event.tcpflags), saddr, event.sport, daddr, event.dport)
+        pkt_info = "T_%s:%s:%u->%s:%u queuemapping:%u " % (_get_tcpflags(event.tcpflags), saddr, event.sport, daddr, event.dport, event.mappingqueue)
     elif event.l4_proto == socket.IPPROTO_UDP:
         pkt_info = "U:%s:%u->%s:%u" % (saddr, event.sport, daddr, event.dport)
     elif event.l4_proto == socket.IPPROTO_ICMP:
         if event.icmptype in [8, 128]:
-            pkt_info = "I_request:%s->%s queuemapping:%u" % (saddr, daddr)
+            pkt_info = "I_request:%s->%s queuemapping:%u" % (saddr, daddr, event.mappingqueue)
         elif event.icmptype in [0, 129]:
-            pkt_info = "I_reply:%s->%s queuemapping:%u" % (saddr, daddr)
+            pkt_info = "I_reply:%s->%s queuemapping:%u" % (saddr, daddr, event.mappingqueue)
         else:
-            pkt_info = "I:%s->%s queuemapping:%u" % (saddr, daddr)
+            pkt_info = "I:%s->%s queuemapping:%u" % (saddr, daddr, event.mappingqueue)
     else:
         pkt_info = "%u:%s->%s" % (event.l4_proto, saddr, daddr)
 
